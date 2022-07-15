@@ -4,14 +4,16 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.makaix.qiandao.utils.db.Comment;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
+@Accessors(fluent = true)
 @Getter
 @Setter
 public class BaseEntity {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     @Comment("主键ID")
     private Long id;
 

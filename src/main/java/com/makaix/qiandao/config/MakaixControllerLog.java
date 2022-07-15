@@ -28,8 +28,6 @@ public class MakaixControllerLog {
 
         try {
             result = pjp.proceed();
-            BaseResVo b = (BaseResVo) result;
-            b.setResCode(200);
         } finally {
             log.info("url: {}, time: {}, queryString: {}", url, System.currentTimeMillis() - start,  queryString);
         }

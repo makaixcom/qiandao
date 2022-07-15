@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.makaix.qiandao.utils.db.Comment;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
-//@Accessors(chain = true)
+@Accessors(fluent = true)
 @Getter
 @Setter
 @Comment("用户")

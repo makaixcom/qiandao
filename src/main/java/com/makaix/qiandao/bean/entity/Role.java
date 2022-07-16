@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.makaix.qiandao.utils.db.Comment;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Accessors(fluent = true)
 @Getter
 @Setter
 @Comment("角色")
@@ -18,10 +20,7 @@ public class Role extends BaseEntity {
     private String code;
 
     @Comment("角色描述")
-    private String description;
-
-    @Comment("角色图标")
-    private String iconCls;
+    private String remark;
 
     @Comment("角色顺序，默认是1")
     private Integer seq;

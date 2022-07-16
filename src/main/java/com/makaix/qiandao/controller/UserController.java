@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "用户模块")
+@Tag(name = "用户")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/user")

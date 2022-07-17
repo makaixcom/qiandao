@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 public class DigestUtils {
 
     public static String sha1(String text){
-        return text + "aaa";
+        return org.springframework.util.DigestUtils.md5DigestAsHex(text.getBytes());
     }
 }

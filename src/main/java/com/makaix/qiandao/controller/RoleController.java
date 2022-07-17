@@ -45,4 +45,23 @@ public class RoleController {
     public void delete(BaseIdReqVo reqVo) {
         roleService.delete(reqVo);
     }
+
+    @Operation(summary = "角色选择框")
+    @GetMapping("/select")
+    public RoleSelectResVo select(){
+        return roleService.select();
+    }
+
+    @Operation(summary = "把角色授权给人")
+    @PutMapping("/grant")
+    public void grant(@RequestBody RoleGrantReqVo reqVo){
+        roleService.grant(reqVo);
+    }
+
+    @Operation(summary = "用户的角色授权")
+    @GetMapping("/grantInfo")
+    public RoleGrantInfoResVo grantInfo(BaseIdReqVo reqVo){
+        return roleService.grantInfo(reqVo);
+    }
+
 }

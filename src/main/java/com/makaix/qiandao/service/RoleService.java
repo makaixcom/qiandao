@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.makaix.qiandao.bean.entity.Role;
+import com.makaix.qiandao.bean.entity.UserRole;
 import com.makaix.qiandao.bean.vo.base.BaseIdReqVo;
 import com.makaix.qiandao.bean.vo.role.*;
 import com.makaix.qiandao.mapper.RoleMapper;
+import com.makaix.qiandao.mapper.UserRoleMapper;
 import com.makaix.qiandao.utils.other.MakaixBeanUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ import java.util.List;
 public class RoleService {
 
     private RoleMapper roleMapper;
+
+    private UserRoleMapper userRoleMapper;
 
     public RoleListResVo list(RoleListReqVo reqVo) {
         QueryWrapper<Role> userQuery = Wrappers.query();
@@ -52,7 +56,6 @@ public class RoleService {
     @Transactional
     public void edit(RoleEditReqVo reqVo) {
         Role role = MakaixBeanUtils.copy(reqVo, Role.class);
-
         roleMapper.updateById(role);
     }
 
@@ -62,4 +65,29 @@ public class RoleService {
     }
 
 
+    public RoleSelectResVo select() {
+        List<Role> roles = roleMapper.selectList(new QueryWrapper<Role>().select("id", "name"));
+        List<RoleSelectResVo.RoleSelectDataResVo> roleSelectDataResVos = roles.stream().map(e -> new RoleSelectResVo.RoleSelectDataResVo(e.getName(), e.getId())).toList();
+        return new RoleSelectResVo(roleSelectDataResVos);
+    }
+
+    @Transactional
+    public void grant(RoleGrantReqVo reqVo) {
+        /* 清理之前的权限 */
+        QueryWrapper<UserRole> oldQuery = new QueryWrapper<>();
+        oldQuery.eq("user_id", reqVo.userId());
+        userRoleMapper.delete(oldQuery);
+
+        /* 赋予新的权限 */
+        UserRole ur = MakaixBeanUtils.copy(reqVo, UserRole.class);
+        userRoleMapper.insert(ur);
+
+    }
+
+    public RoleGrantInfoResVo grantInfo(BaseIdReqVo reqVo) {
+        QueryWrapper<UserRole> userRoleQuery = new QueryWrapper<>();
+        userRoleQuery.eq("user_id", reqVo.id());
+        UserRole userRole = userRoleMapper.selectOne(userRoleQuery);
+        return new RoleGrantInfoResVo(reqVo.id(), userRole == null ? null:userRole.getRoleId());
+    }
 }

@@ -14,5 +14,7 @@ public class MakaixBeanUtils {
         T t = clazz.getDeclaredConstructor().newInstance();
         BeanUtils.copyProperties(target, t);
         return t;
+
     }
+
 }

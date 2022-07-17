@@ -7,6 +7,7 @@ import com.makaix.qiandao.bean.entity.Role;
 import com.makaix.qiandao.bean.vo.base.BaseIdReqVo;
 import com.makaix.qiandao.bean.vo.role.*;
 import com.makaix.qiandao.mapper.RoleMapper;
+import com.makaix.qiandao.utils.other.MakaixBeanUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,7 @@ public class RoleService {
 
         List<RoleListResVo.RoleListDataResVo> collect = userPage.getRecords()
                 .stream()
-                .map(e -> new RoleListResVo.RoleListDataResVo(e.id(), e.name(), e.code(), e.remark(), e.seq(), e.createDateTime(), e.modifyDateTime()) )
+                .map(e -> new RoleListResVo.RoleListDataResVo(e.getId(), e.getName(), e.getCode(), e.getRemark(), e.getSeq(), e.getCreateDateTime(), e.getModifyDateTime()) )
                 .toList();
 
         return new RoleListResVo(userPage.getTotal(), collect);
@@ -39,27 +40,18 @@ public class RoleService {
 
     @Transactional
     public void add(RoleAddReqVo reqVo) {
-        Role role = new Role();
-        role.name(reqVo.name());
-        role.code(reqVo.code());
-        role.remark(reqVo.remark());
-        role.seq(reqVo.seq());
+        Role role = MakaixBeanUtils.copy(reqVo, Role.class);
         roleMapper.insert(role);
     }
 
     public RoleGetResVo get(BaseIdReqVo reqVo) {
-        Role role = roleMapper.selectById(reqVo.id());
-        return new RoleGetResVo(role.id(), role.name(), role.code(), role.remark(), role.seq());
+        Role e = roleMapper.selectById(reqVo.id());
+        return new RoleGetResVo(e.getId(), e.getName(), e.getCode(), e.getRemark(), e.getSeq());
     }
 
     @Transactional
     public void edit(RoleEditReqVo reqVo) {
-        Role role = new Role();
-        role.id(reqVo.id());
-        role.name(reqVo.name());
-        role.code(reqVo.code());
-        role.remark(reqVo.remark());
-        role.seq(reqVo.seq());
+        Role role = MakaixBeanUtils.copy(reqVo, Role.class);
 
         roleMapper.updateById(role);
     }

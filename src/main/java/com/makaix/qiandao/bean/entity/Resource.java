@@ -21,14 +21,18 @@ public class Resource extends BaseEntity {
     private String url;
 
     @Comment("权限描述")
-    private String description;
+    private String remark;
 
-    @Comment("权限图片")
-    private String iconCls;
+    @Comment("权限图标")
+    private String icon;
 
     @Comment("权限顺序")
     private Integer seq;
 
     @Comment("新窗口打开")
     private String target;
+
+    @Comment("父ID")
+    private Long pid;
+
 }

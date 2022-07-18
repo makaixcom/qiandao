@@ -66,9 +66,10 @@ public class ResourceService {
         roleResourceQuery.eq("role_id", reqVo.roleId());
         roleResourceMapper.delete(roleResourceQuery);
 
+        String[] split = reqVo.resourceIds().split(",");
         /* 重新添加绑定关系 */
-        for (int i = 0; i < reqVo.resourceIds().size(); i++) {
-            Long resourceId = reqVo.resourceIds().get(i);
+        for (int i = 0; i < split.length; i++) {
+            Long resourceId = Long.parseLong(split[i]);
 
             RoleResource rr = new RoleResource();
             rr.setRoleId(reqVo.roleId());

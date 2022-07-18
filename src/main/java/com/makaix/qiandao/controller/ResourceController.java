@@ -48,7 +48,8 @@ public class ResourceController {
 
     @Operation(summary = "资源授权")
     @PutMapping("/grant")
-    public void grant(ResourceGrantReqVo reqVo) {
+    public void grant(@RequestBody ResourceGrantReqVo reqVo) {
+//        System.out.println(reqVo.toString());
         resourceService.grant(reqVo);
     }
     @Operation(summary = "资源授权获得")

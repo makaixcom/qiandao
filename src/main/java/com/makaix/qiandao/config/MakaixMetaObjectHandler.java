@@ -15,7 +15,7 @@ public class MakaixMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "createDateTime", LocalDateTime.class, now);
         this.strictInsertFill(metaObject, "modifyDateTime", LocalDateTime.class, now);
         this.strictInsertFill(metaObject, "version", Integer.class, 1);
-        this.strictInsertFill(metaObject, "deleted", Integer.class, 1);
+        this.strictInsertFill(metaObject, "deleted", Integer.class, 0);
     }
 
     @Override

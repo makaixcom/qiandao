@@ -9,6 +9,6 @@ public record ResourceGetResVo(@Schema(example = "ID") Long id,
                                @Schema(example = "权限描述") String remark,
                                @Schema(example = "权限图标") String icon,
                                @Schema(example = "权限顺序") Integer seq,
-                               @Schema(example = "新窗口打开") String target,
+                               @Schema(example = "新窗口打开") String method,
                                @Schema(example = "父ID") Long pid) {
 }

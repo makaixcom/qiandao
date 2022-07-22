@@ -8,8 +8,8 @@ import com.makaix.qiandao.bean.vo.base.BaseIdReqVo;
 import com.makaix.qiandao.bean.vo.user.*;
 import com.makaix.qiandao.mapper.UserMapper;
 import com.makaix.qiandao.utils.other.MakaixBeanUtils;
-import com.makaix.qiandao.utils.security.DigestUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -22,10 +22,12 @@ public class UserService {
 
     private UserMapper userMapper;
 
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public void add(UserAddReqVo reqVo) {
         User user = MakaixBeanUtils.copy(reqVo, User.class);
-        user.setPassword(DigestUtils.sha1(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userMapper.insert(user);
     }
 
@@ -66,7 +68,7 @@ public class UserService {
     @Transactional
     public void resetPwd(UserResetPwdReqVo reqVo) {
         User user = MakaixBeanUtils.copy(reqVo, User.class);
-        user.setPassword(DigestUtils.sha1(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userMapper.updateById(user);
     }
 }

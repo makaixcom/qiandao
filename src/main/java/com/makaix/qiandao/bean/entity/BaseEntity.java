@@ -25,7 +25,7 @@ public class BaseEntity {
     private LocalDateTime modifyDateTime;
 
     @Comment("是否删除")
-    @TableLogic(value = "1", delval="0")
+    @TableLogic
     @TableField(fill = FieldFill.INSERT)
     private Integer deleted;
 

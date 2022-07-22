@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "资源")
 @AllArgsConstructor
 @RestController
@@ -49,13 +51,18 @@ public class ResourceController {
     @Operation(summary = "资源授权")
     @PutMapping("/grant")
     public void grant(@RequestBody ResourceGrantReqVo reqVo) {
-//        System.out.println(reqVo.toString());
         resourceService.grant(reqVo);
     }
     @Operation(summary = "资源授权获得")
     @GetMapping("/grantInfo")
     public ResourceGrantInfoResVo grantInfo(ResourceGrantInfoReqVo reqVo) {
         return resourceService.grantInfo(reqVo);
+    }
+
+    @Operation(summary = "用户菜单")
+    @GetMapping("/menu")
+    public List<ResourceMenuResVo> menu() {
+        return resourceService.menu();
     }
 
 }

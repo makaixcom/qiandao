@@ -12,8 +12,13 @@ import com.makaix.qiandao.utils.other.MakaixBeanUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -30,7 +35,7 @@ public class ResourceService {
 
         List<ResourceListResVo.ResourceListDataResVo> collect = resources
                 .stream()
-                .map(e -> new ResourceListResVo.ResourceListDataResVo(e.getId(), e.getName(), e.getType(), e.getUrl(), e.getRemark(), e.getIcon(), e.getSeq(), e.getTarget(), e.getPid(), e.getCreateDateTime(), e.getModifyDateTime()))
+                .map(e -> new ResourceListResVo.ResourceListDataResVo(e.getId(), e.getName(), e.getType(), e.getUrl(), e.getRemark(), e.getIcon(), e.getSeq(), e.getMethod(), e.getPid(), e.getCreateDateTime(), e.getModifyDateTime()))
                 .toList();
 
         return new ResourceListResVo(collect);
@@ -44,7 +49,7 @@ public class ResourceService {
 
     public ResourceGetResVo get(BaseIdReqVo reqVo) {
         Resource e = resourceMapper.selectById(reqVo.id());
-        return new ResourceGetResVo(e.getId(), e.getName(), e.getType(), e.getUrl(), e.getRemark(), e.getIcon(), e.getSeq(), e.getTarget(), e.getPid());
+        return new ResourceGetResVo(e.getId(), e.getName(), e.getType(), e.getUrl(), e.getRemark(), e.getIcon(), e.getSeq(), e.getMethod(), e.getPid());
     }
 
     @Transactional
@@ -87,5 +92,33 @@ public class ResourceService {
         List<RoleResource> roleResources = roleResourceMapper.selectList(roleResourceQuery);
         List<Long> longs = roleResources.stream().map(RoleResource::getResourceId).toList();
         return new ResourceGrantInfoResVo(longs);
+    }
+
+    public List<ResourceMenuResVo> menu() {
+        QueryWrapper<Resource> resourceQuery = Wrappers.query();
+        resourceQuery.in("type", 0, 1);
+        List<Resource> resources = resourceMapper.selectList(resourceQuery);
+
+        Map<Long, ResourceMenuResVo> collect = resources
+                .stream()
+                .map(e -> new ResourceMenuResVo(e.getId(), e.getName(), StringUtils.hasText(e.getUrl())?1:0, e.getUrl(), e.getIcon(),StringUtils.hasText(e.getUrl())?"_iframe":null, e.getPid(), new ArrayList<>()))
+                .collect(Collectors.toMap(ResourceMenuResVo::id, Function.identity()));
+
+        List<ResourceMenuResVo> root = new ArrayList<>();
+
+        for (ResourceMenuResVo value : collect.values()) {
+            if(value.pid() == null){
+                root.add(value);
+            } else {
+                ResourceMenuResVo testPojo = collect.get(value.pid());
+                if(testPojo == null){
+                    root.add(value);
+                } else {
+                    testPojo.children().add(value);
+                }
+            }
+        }
+
+        return root;
     }
 }

@@ -30,7 +30,7 @@ public class Resource extends BaseEntity {
     private Integer seq;
 
     @Comment("新窗口打开")
-    private String target;
+    private String method;
 
     @Comment("父ID")
     private Long pid;
